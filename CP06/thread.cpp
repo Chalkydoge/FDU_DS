@@ -178,14 +178,37 @@ void post_trav(BinNode* root){
     }
 }
 
+vector<int> res;
+int get_depth(BinNode* root){
+    if(!root)
+        return -1;
+    return 1 + max(get_depth(root->left), get_depth(root->right));
+}
+
+void longestPath(BinNode* root){
+    if(!root)
+        return;
+    res.push_back(root->val);
+    int l = get_depth(root->left), r = get_depth(root->right);
+    if(l >= r)
+        return longestPath(root->left);
+    else
+        return longestPath(root->right);
+}
+
 int main(){
     vector<int> nums = {1, 2, 3, 4, 5, -1, -1};
     BinNode *root = build(nums);
     BinNode *pre = nullptr;
+    longestPath(root);
+    for(int i : res)
+        cout << i << "->";
+    cout << endl;
     // post_thread(root, pre);
     // post_trav(root);
     mid_thread(root, pre);
     mid_trav(root);
-
+    BinNode* cur = find_parent(root, root->left->left);
+    cout << cur->val << endl;
     return 0;
 }
